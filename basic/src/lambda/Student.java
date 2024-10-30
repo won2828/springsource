@@ -35,4 +35,9 @@ public class Student {
         this.eng = eng;
     }
 
+    public Object startsWith(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'startsWith'");
+    }
+
 }
