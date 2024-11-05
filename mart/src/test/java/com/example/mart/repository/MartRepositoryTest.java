@@ -6,11 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.mart.entity.constant.DeliveryStatus;
 import com.example.mart.entity.constant.OrderStatus;
-import com.example.mart.entity.constant.item.Item;
-import com.example.mart.entity.constant.item.Member;
-import com.example.mart.entity.constant.item.Order;
-import com.example.mart.entity.constant.item.OrderItem;
+import com.example.mart.entity.item.Delivery;
+import com.example.mart.entity.item.Item;
+import com.example.mart.entity.item.Member;
+import com.example.mart.entity.item.Order;
+import com.example.mart.entity.item.OrderItem;
+import com.example.mart.repository.item.DeliveryRepository;
 import com.example.mart.repository.item.ItemRepository;
 import com.example.mart.repository.item.MemberRepository;
 import com.example.mart.repository.item.OrderItemRepository;
@@ -32,6 +35,9 @@ public class MartRepositoryTest {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private DeliveryRepository deliveryRepository;
 
     @Test
     public void memberInsertTest() {
@@ -91,7 +97,7 @@ public class MartRepositoryTest {
     @Test
     public void memberAndItemAndOrderRowTest() {
 
-        OrderItem orderItem = orderItemRepository.findById(1L).get();
+        OrderItem orderItem = orderItemRepository.findById(3L).get();
 
         // 주문 상세 내역 조회
         System.out.println(orderItem);
@@ -131,8 +137,7 @@ public class MartRepositoryTest {
         Item item = itemRepository.findById(2L).get();
         item.setPrice(26000);
         itemRepository.save(item);
-
-        OrderItem orderItem = orderItemRepository.findById(1L).get();
+        OrderItem orderItem = orderItemRepository.findById(3L).get();
         orderItem.setPrice(26000);
         orderItemRepository.save(orderItem);
     }
@@ -143,9 +148,9 @@ public class MartRepositoryTest {
         // 주문 취소
 
         // 1. 주문상품 취소
-        orderItemRepository.deleteById(1L);
+        orderItemRepository.deleteById(3L);
         // 2. 주문 취소
-        orderRepository.deleteById(1L);
+        orderRepository.deleteById(3L);
     }
 
     // 양방향
@@ -154,7 +159,7 @@ public class MartRepositoryTest {
     @Test
     public void testOrderItemList() {
 
-        Order order = orderRepository.findById(2L).get();
+        Order order = orderRepository.findById(1L).get();
         System.out.println(order);
         // Order ==> OrderItem 탐색 시도
         order.getOrderItemsList().forEach(orderItem -> System.out.println(orderItem));
@@ -169,5 +174,42 @@ public class MartRepositoryTest {
 
         // Member ==> Order 탐색 시도
         member.getOrders().forEach(order -> System.out.println(order));
+    }
+
+    @Test
+    public void testDeliveryInsert() {
+        // 배송정보 입력
+        Delivery delivery = Delivery.builder()
+                .city("서울시")
+                .street("종로 3가")
+                .zipcode("11111")
+                .deliveryStatus(DeliveryStatus.READY)
+                .build();
+
+        deliveryRepository.save(delivery);
+
+        // order 와 배송정보 연결
+        Order order = orderRepository.findById(1L).get();
+        order.setDelivery(delivery);
+        orderRepository.save(order);
+    }
+
+    @Test
+    public void testOrderRead() {
+        // order 조회 (+ 배송정보)
+        Order order = orderRepository.findById(1L).get();
+        System.out.println(order);
+
+        System.out.println(order.getDelivery());
+
+    }
+
+    // 양방향(배송 => 주문)
+    @Test
+    public void testDeliveryRead() {
+        // 배송정보 조회 (+ order)
+        Delivery delivery = deliveryRepository.findById(1L).get();
+        System.out.println(delivery);
+        System.out.println(delivery.getOrder());
     }
 }

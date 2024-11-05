@@ -1,4 +1,4 @@
-package com.example.mart.entity.constant.item;
+package com.example.mart.entity.item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,7 @@ import lombok.ToString;
 @SequenceGenerator(name = "mart_item_seq_gen", sequenceName = "mart_item_seq", allocationSize = 1)
 @Table(name = "mart_item")
 @Entity
-public class Item {
+public class Item extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mart_item_seq_gen")
     @Column(name = "item_id")
