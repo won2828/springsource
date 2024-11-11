@@ -51,4 +51,13 @@ public class MemoRepositoryTest {
     public void testMemoDelete() {
         memoRepository.deleteById(29L);
     }
+
+    @Test
+    public void testQueryMethod() {
+        // memoRepository.findByMnoLessThan(30L).forEach(a -> System.out.println(a));
+        // memoRepository.findByMnoLessThanOrderByMnoDesc(40L).forEach(a ->
+        // System.out.println(a));
+        memoRepository.findByMnoBetweenOrderByMnoDesc(50L, 100L).forEach(a -> System.out.println(a));
+
+    }
 }
