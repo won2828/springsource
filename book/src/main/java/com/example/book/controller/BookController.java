@@ -6,12 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import com.example.book.dto.BookDto;
-import com.example.book.dto.CategoryDto;
-import com.example.book.dto.PublisherDto;
-import com.example.book.service.BookService;
-
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +13,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.example.book.dto.BookDto;
+import com.example.book.dto.CategoryDto;
+import com.example.book.dto.PageRequestDto;
+import com.example.book.dto.PageResultDto;
+import com.example.book.dto.PublisherDto;
+import com.example.book.entity.Book;
+import com.example.book.service.BookService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -31,16 +37,17 @@ public class BookController {
 
     // 리스트 추출
     @GetMapping("/list")
-    public void getList(Model model) {
-        log.info("도서 전체 목록 요청");
-        List<BookDto> list = bookService.getList();
-        model.addAttribute("list", list);
+    public void getList(@ModelAttribute(name = "requestDto") PageRequestDto requestDto, Model model) {
+        log.info("도서 전체 목록 요청 {}", requestDto);
+
+        PageResultDto<BookDto, Book> result = bookService.getList(requestDto);
+        model.addAttribute("result", result);
     }
 
     // 상세조회
-    @GetMapping({ "/read", "/modify" })
-
-    public void getRead(@RequestParam Long id, Model model) {
+    @GetMapping(value = { "/read", "/modify" })
+    public void getMethodName(@RequestParam Long id, @ModelAttribute("requestDto") PageRequestDto requestDto,
+            Model model) {
         log.info("도서 상세 요청 {}", id);
 
         BookDto dto = bookService.getRow(id);
@@ -48,8 +55,10 @@ public class BookController {
     }
 
     @PostMapping("/modify")
-    public String postModify(BookDto dto, RedirectAttributes rttr) {
+    public String postModify(BookDto dto, @ModelAttribute("requestDto") PageRequestDto requestDto,
+            RedirectAttributes rttr) {
         log.info("도서 수정 요청 {}", dto);
+        log.info("requestDto {}", requestDto);
 
         Long id = bookService.update(dto);
 
@@ -59,9 +68,17 @@ public class BookController {
     }
 
     @PostMapping("/remove")
-    public String postMethodName(@RequestParam Long id) {
+    public String postMethodName(@RequestParam Long id, @ModelAttribute("requestDto") PageRequestDto requestDto,
+            RedirectAttributes rttr) {
         log.info("도서 삭제 요청 {}", id);
+        log.info("requestDto {}", requestDto);
+
         bookService.delete(id);
+
+        rttr.addAttribute("page", requestDto.getPage());
+        rttr.addAttribute("size", requestDto.getSize());
+        rttr.addAttribute("type", requestDto.getType());
+        rttr.addAttribute("keyword", requestDto.getKeyword());
 
         return "redirect:list";
     }
@@ -71,10 +88,10 @@ public class BookController {
         log.info("도서 입력 폼 요청");
 
         List<CategoryDto> categories = bookService.getCateList();
-        List<PublisherDto> publishers = bookService.getPubList();
+        List<PublisherDto> publisherDtos = bookService.getPubList();
 
         model.addAttribute("cDtos", categories);
-        model.addAttribute("pDtos", publishers);
+        model.addAttribute("pDtos", publisherDtos);
     }
 
     @PostMapping("/create")
@@ -83,10 +100,10 @@ public class BookController {
         log.info("도서 입력 요청 {}", dto);
 
         List<CategoryDto> categories = bookService.getCateList();
-        List<PublisherDto> publishers = bookService.getPubList();
+        List<PublisherDto> publisherDtos = bookService.getPubList();
 
         model.addAttribute("cDtos", categories);
-        model.addAttribute("pDtos", publishers);
+        model.addAttribute("pDtos", publisherDtos);
 
         if (result.hasErrors()) {
             return "/book/create";

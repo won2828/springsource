@@ -15,8 +15,8 @@
             class="form-control"
             id="categoryName"
             name="categoryName"
-            th:value="${dto.categoryName}"
             readonly
+            th:value="${dto.categoryName}"
           />
         </div>
       </div>
@@ -28,8 +28,8 @@
             class="form-control"
             id="title"
             name="title"
-            th:value="${dto.title}"
             readonly
+            th:value="${dto.title}"
           />
         </div>
       </div>
@@ -43,8 +43,8 @@
             class="form-control"
             id="publisherName"
             name="publisherName"
-            th:value="${dto.publisherName}"
             readonly
+            th:value="${dto.publisherName}"
           />
         </div>
       </div>
@@ -56,8 +56,8 @@
             class="form-control"
             id="writer"
             name="writer"
-            th:value="${dto.writer}"
             readonly
+            th:value="${dto.writer}"
           />
         </div>
       </div>
@@ -69,8 +69,8 @@
             class="form-control"
             id="price"
             name="price"
-            th:value="${dto.price}"
             readonly
+            th:value="${dto.price}"
           />
         </div>
       </div>
@@ -82,8 +82,8 @@
             class="form-control"
             id="salePrice"
             name="salePrice"
-            th:value="${dto.salePrice}"
             readonly
+            th:value="${dto.salePrice}"
           />
         </div>
       </div>
@@ -97,21 +97,28 @@
             class="form-control"
             id="createdDateTime"
             name="createdDateTime"
-            th:value="${#temporals.format(dto.createdDateTime, 'yyyy-MM-dd HH:mm')}"
             readonly
+            th:value="${#temporals.format(dto.createdDateTime,'yyyy-MM-dd HH:mm')}"
           />
         </div>
       </div>
       <div>
-        <a th:href="@{modify(id=${dto.id})}" class="btn btn-primary">수정</a>
-        <a th:href="@{list}" class="btn btn-secondary">목록</a>
+        <a
+          th:href="@{modify(id=${dto.id},page=${requestDto.page},size=${requestDto.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+          class="btn btn-primary"
+          >수정</a
+        >
+        <a
+          th:href="@{list(page=${requestDto.page},size=${requestDto.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+          class="btn btn-secondary"
+          >목록</a
+        >
       </div>
     </form>
   </div>
-
   <th:block layout:fragment="script">
     <script>
-      // 스크립트 작성
+      //스크립트 작성
     </script>
   </th:block>
 </html>

@@ -16,16 +16,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString(exclude = { "category", "publisher" })
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = { "category", "publisher" })
+@Setter
+@Builder
+@Getter
 @Table(name = "booktbl")
 @Entity
 public class Book extends BaseEntity {
-    // id,제목,저자,출판일,가격,할인가격
+
     @SequenceGenerator(name = "book_seq_gen", sequenceName = "book_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_seq_gen")
     @Id
@@ -39,10 +39,10 @@ public class Book extends BaseEntity {
     private String writer;
 
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(nullable = false)
-    private int salePrice;
+    private Integer salePrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;

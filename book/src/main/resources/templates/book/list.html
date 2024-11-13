@@ -5,7 +5,7 @@
   </th:block>
 
   <div layout:fragment="content" class="container">
-    <h1>도서 목록</h1>
+    <h1>도서 전체 목록</h1>
     <table class="table">
       <thead>
         <tr>
@@ -17,12 +17,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr th:each="dto : ${list}">
+        <tr th:each="dto : ${result.dtoList}">
           <th scope="row" th:text="${dto.id}"></th>
           <td th:text="${dto.categoryName}"></td>
           <td>
             <a
-              th:href="@{read(id=${dto.id})}"
+              th:href="@{read(id=${dto.id},page=${requestDto.page},size=${requestDto.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
               th:text="${dto.title}"
               class="text-decoration-none"
             ></a>
@@ -32,11 +32,41 @@
         </tr>
       </tbody>
     </table>
-  </div>
+    <nav aria-label="...">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${result.prev}">
+          <a
+            class="page-link"
+            th:href="@{list(page=${result.start-1},size=${result.size})}"
+            >Previous</a
+          >
+        </li>
 
+        <li
+          th:class="'page-item ' + ${result.page == page ? 'active':''}"
+          aria-current="page"
+          th:each="page : ${result.pageList}"
+        >
+          <a
+            class="page-link"
+            th:href="@{list(page=${requestDto.page},size=${requestDto.size},type=${requestDto.type},keyword=${requestDto.keyword})}"
+            th:text="${page}"
+          ></a>
+        </li>
+
+        <li class="page-item" th:if="${result.next}">
+          <a
+            class="page-link"
+            th:href="@{list(page=${result.end+1},size=${result.size})}"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
+  </div>
   <th:block layout:fragment="script">
     <script>
-      // 스크립트 작성
+      //스크립트 작성
       const msg = "[[${msg}]]";
       if (msg) {
         alert(msg);
