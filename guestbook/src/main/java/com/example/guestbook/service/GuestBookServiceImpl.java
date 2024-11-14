@@ -3,7 +3,6 @@ package com.example.guestbook.service;
 import java.util.function.Function;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,19 +25,23 @@ public class GuestBookServiceImpl implements GuestBookService {
 
     @Override
     public Long register(GuestBookDto dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+        return guestBookRepository.save(dtoToEntity(dto)).getGno();
     }
 
     @Override
     public GuestBookDto read(Long gno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+
+        // GuestBook result = guestBookRepository.findById(gno).get();
+        // GuestBookDto dto = entityToDto(result);
+        // return dto;
+
+        return entityToDto(guestBookRepository.findById(gno).get());
     }
 
     @Override
     public PageResultDto<GuestBookDto, GuestBook> list(PageRequestDto requestDto) {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
+
+        Pageable pageable = requestDto.getPageable(Sort.by("gno").descending());
 
         // Predicate predicate(BooleanBuilder 사용), Pageable pageable
         Page<GuestBook> result = guestBookRepository
@@ -51,14 +54,19 @@ public class GuestBookServiceImpl implements GuestBookService {
 
     @Override
     public Long update(GuestBookDto dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+
+        // dto => entity
+        GuestBook guestBook = guestBookRepository.findById(dto.getGno()).get();
+
+        guestBook.setTitle(dto.getTitle());
+        guestBook.setContent(dto.getContent());
+
+        return guestBookRepository.save(guestBook).getGno();
     }
 
     @Override
     public void delete(Long gno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        guestBookRepository.deleteById(gno);
     }
 
 }
