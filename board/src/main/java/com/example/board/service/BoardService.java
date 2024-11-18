@@ -8,7 +8,7 @@ import com.example.board.entity.Member;
 
 public interface BoardService {
 
-    // CRUD
+    // crud
     Long register(BoardDto dto);
 
     PageResultDto<BoardDto, Object[]> getList(PageRequestDto requestDto);
@@ -45,4 +45,5 @@ public interface BoardService {
                 .writer(member)
                 .build();
     }
+
 }

@@ -25,7 +25,6 @@ import com.example.book.service.BookService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -84,7 +83,8 @@ public class BookController {
     }
 
     @GetMapping("/create")
-    public void getCreate(@ModelAttribute("dto") BookDto dto, Model model) {
+    public void getCreate(@ModelAttribute("dto") BookDto dto, Model model,
+            @ModelAttribute("requestDto") PageRequestDto requestDto) {
         log.info("도서 입력 폼 요청");
 
         List<CategoryDto> categories = bookService.getCateList();

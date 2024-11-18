@@ -45,12 +45,12 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
                 .where(qReply.board.eq(qBoard))
                 .groupBy(qReply.board);
 
-        // 1) from 절 부터 구현 : join 2) select
+        // 1) from 절부터 구현 : join 2) select
         JPQLQuery<Tuple> tuple = from(qBoard)
                 .leftJoin(qMember).on(qBoard.writer.eq(qMember))
                 .select(qBoard, qMember, replyCnt);
 
-        System.out.println("=========== 쿼리문 확인");
+        System.out.println("========== 쿼리문 확인");
         System.out.println(tuple);
 
         List<Tuple> result = tuple.fetch();
@@ -59,7 +59,7 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Object[]> list(Pageable pageable) {
+    public Page<Object[]> list(String type, String keyword, Pageable pageable) {
         QBoard qBoard = QBoard.board;
         QMember qMember = QMember.member;
         QReply qReply = QReply.reply;
@@ -73,11 +73,29 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
 
         JPQLQuery<Tuple> tuple = from(qBoard)
                 .leftJoin(qMember).on(qBoard.writer.eq(qMember))
-                .select(qBoard, qMember, replyCnt).where(qBoard.bno.gt(0L));
+                .select(qBoard, qMember, replyCnt);
 
         // bno > 0 조건
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qBoard.bno.gt(0L));
+
+        if (type != null) {
+            // content like '%검색어%' or title like '%검색어%' or writer like '%검색어%'
+            BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+            if (type.contains("c")) { // 내용
+                conditionBuilder.or(qBoard.content.contains(keyword));
+            }
+
+            if (type.contains("t")) { // 제목
+                conditionBuilder.or(qBoard.title.contains(keyword));
+            }
+
+            if (type.contains("w")) { // 작성자
+                conditionBuilder.or(qMember.email.contains(keyword));
+            }
+            builder.and(conditionBuilder);
+        }
 
         tuple.where(builder);
 
@@ -103,7 +121,29 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport impleme
         long count = tuple.fetchCount();
 
         return new PageImpl<>(result.stream().map(t -> t.toArray()).collect(Collectors.toList()), pageable, count);
+    }
 
+    @Override
+    public Object[] getBoardByBno(Long bno) {
+        QBoard qBoard = QBoard.board;
+        QMember qMember = QMember.member;
+        QReply qReply = QReply.reply;
+
+        // select 절에 사용할 subquery
+        JPQLQuery<Long> replyCnt = JPAExpressions
+                .select(qReply.rno.count())
+                .from(qReply)
+                .where(qReply.board.eq(qBoard))
+                .groupBy(qReply.board);
+
+        JPQLQuery<Tuple> tuple = from(qBoard)
+                .leftJoin(qMember).on(qBoard.writer.eq(qMember))
+                .select(qBoard, qMember, replyCnt)
+                .where(qBoard.bno.eq(bno));
+
+        Tuple row = tuple.fetch().get(0);
+
+        return row.toArray();
     }
 
 }

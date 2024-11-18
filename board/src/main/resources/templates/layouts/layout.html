@@ -2,13 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Board + Reply + Member</title>
+    <!--font awesome-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -22,7 +27,7 @@
       <!-- Page content wrapper-->
       <div id="page-content-wrapper">
         <!-- Top navigation-->
-        <div th:replace="~{fragments/header::header}"></div>
+        <div th:replace="~{/fragments/header::header}"></div>
         <!-- Page content-->
         <div class="container-fluid mt-3">
           <div layout:fragment="content"></div>
@@ -34,6 +39,6 @@
     <!-- Core theme JS-->
     <script th:src="@{/js/scripts.js}"></script>
     <!-- Custom JS -->
-    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="script"> </th:block>
   </body>
 </html>
