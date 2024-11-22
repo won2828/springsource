@@ -12,11 +12,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.entity.Reply;
+import com.example.board.entity.constant.MemberRole;
 
 import jakarta.transaction.Transactional;
 
@@ -30,14 +32,18 @@ public class BoardRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     public void testInsertMember() {
         // 30명
         IntStream.rangeClosed(1, 30).forEach(i -> {
             Member member = Member.builder()
                     .email("user" + i + "@gmail.com")
-                    .password("1111")
+                    .password(passwordEncoder.encode("1111"))
                     .name("user" + i)
+                    .role(MemberRole.MEMBER)
                     .build();
             memberRepository.save(member);
         });
@@ -70,7 +76,7 @@ public class BoardRepositoryTest {
 
             Reply reply = Reply.builder()
                     .text("reply...." + i)
-                    .replyer("guest" + i)
+                    // .replyer("guest" + i)
                     .board(board)
                     .build();
             replyRepository.save(reply);
@@ -169,13 +175,11 @@ public class BoardRepositoryTest {
 
     @Test
     public void testReplyUpdate() {
-
         // 댓글 수정
-        Reply reply = replyRepository.findById(100L).get();
-        System.out.println("reply " + reply);
-
+        Reply reply = replyRepository.findById(103L).get();
+        System.out.println("reply  " + reply);
         // 내용 수정
-        reply.setText("내용 수정");
+        reply.setText("내용수정");
         System.out.println(replyRepository.save(reply));
     }
 }

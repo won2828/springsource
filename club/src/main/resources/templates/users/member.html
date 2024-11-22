@@ -12,35 +12,40 @@
     <title>Document</title>
   </head>
   <body>
-    <h3>MEMBER</h3>
+    <div class="container">
+      <h3>MEMBER</h3>
 
-    <h6>
-      권한 확인 :
-      <span sec:authentication="principal.authorities"></span>
-    </h6>
-    <h6>
-      이름 :
-      <span sec:authentication="principal.name"></span>
-    </h6>
-    <h6>
-      이메일 :
-      <span sec:authentication="principal.username"></span>
-    </h6>
-    <h6>
-      이메일 :
-      <span sec:authentication="principal.email"></span>
-    </h6>
-    <h6>
-      이메일 :
-      <span sec:authentication="name"></span>
-    </h6>
-    <h6>
-      social 여부 :
-      <span sec:authentication="principal.fromSocial"></span>
-    </h6>
+      <h4>
+        권한 확인
+        <span sec:authentication="principal.authorities"></span>
+      </h4>
 
-    <div sec:authorize="isAuthenticated()">
-      <a class="btn btn-success" th:href="@{/users/logout}">로그아웃</a>
+      <h4>
+        이름
+        <span sec:authentication="principal.name"></span>
+      </h4>
+
+      <h4>
+        이메일
+        <div>
+          <span sec:authentication="principal.username"></span>
+        </div>
+        <div>
+          <span sec:authentication="principal.email"></span>
+        </div>
+        <div>
+          <span sec:authentication="name"></span>
+        </div>
+      </h4>
+
+      <h4>
+        social 여부
+        <span sec:authentication="principal.fromSocial"></span>
+      </h4>
+
+      <div sec:authorize="isAuthenticated()">
+        <a class="btn btn-success" th:href="@{/users/logout}">로그아웃</a>
+      </div>
     </div>
   </body>
 </html>

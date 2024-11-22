@@ -12,10 +12,12 @@
     <title>Document</title>
   </head>
   <body>
-    <h3>ADMIN</h3>
+    <div class="container">
+      <h3>ADMIN</h3>
 
-    <div sec:authorize="isAuthenticated()">
-      <a class="btn btn-success" th:href="@{/users/logout}">로그아웃</a>
+      <div sec:authorize="isAuthenticated()">
+        <a class="btn btn-success" th:href="@{/users/logout}">로그아웃</a>
+      </div>
     </div>
   </body>
 </html>

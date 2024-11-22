@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.club.entity.ClubMember;
 import com.example.club.entity.constant.ClubRole;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
 public class ClubMemberRepositoryTest {
 
@@ -23,7 +25,7 @@ public class ClubMemberRepositoryTest {
     public void testInsert() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
             ClubMember clubMember = ClubMember.builder()
-                    .email("user" + i + "@email.com")
+                    .email("user" + i + "@gmail.com")
                     .name("user" + i)
                     .fromSocial(false)
                     .password(passwordEncoder.encode("1111"))
@@ -37,7 +39,6 @@ public class ClubMemberRepositoryTest {
             if (i > 90) {
                 clubMember.addMemberRole(ClubRole.ADMIN);
             }
-
             clubMemberRepository.save(clubMember);
         });
     }
@@ -47,8 +48,9 @@ public class ClubMemberRepositoryTest {
     public void testFind() {
 
         // 회원조회
-        // System.out.println(clubMemberRepository.findById("user17@email.com").get());
+        // System.out.println(clubMemberRepository.findById("user17@gmail.com").get());
 
-        System.out.println(clubMemberRepository.findByEmailAndFromSocial("user17@email.com", false));
+        System.out.println(clubMemberRepository.findByEmailAndFromSocial("user17@gmail.com", false));
+
     }
 }
