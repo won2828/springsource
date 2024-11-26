@@ -36,7 +36,7 @@ public interface MovieService {
                 .title(movie.getTitle())
                 // .movieImageDtos(movieImages)
                 .reviewCnt(reviewCnt)
-                .reviewAvg(reviewAvg)
+                .reviewAvg(reviewAvg != null ? reviewAvg : 0.0d)
                 .regDate(movie.getRegDate())
                 .build();
 
