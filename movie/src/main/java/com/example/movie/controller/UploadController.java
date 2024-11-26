@@ -61,9 +61,7 @@ public class UploadController {
             try {
                 // 폴더 저장
                 multipartFile.transferTo(savePath);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
