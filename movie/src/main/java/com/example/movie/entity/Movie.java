@@ -37,7 +37,7 @@ public class Movie extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    // 자식 연관관계 추가(양방향) // MovieRepositoryTest 의 testRemove2에 필요
+    // 자식 연관관계 추가(양방향)
     // @Builder.Default
     // @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
     // List<MovieImage> movieImages = new ArrayList<>();

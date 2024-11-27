@@ -16,6 +16,7 @@ import com.example.movie.dto.MovieDto;
 import com.example.movie.dto.PageRequestDto;
 import com.example.movie.dto.PageResultDto;
 import com.example.movie.service.MovieService;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -37,7 +38,7 @@ public class MovieController {
     @GetMapping({ "/read", "/modify" })
     public void getRead(@RequestParam Long mno, Model model,
             @ModelAttribute("requestDto") PageRequestDto pageRequestDto) {
-        log.info("영화 상세 정보 오청 {}", mno);
+        log.info("영화 상세 정보 요청 {}", mno);
 
         MovieDto movieDto = movieService.get(mno);
         model.addAttribute("movieDto", movieDto);
@@ -55,6 +56,27 @@ public class MovieController {
         rttr.addAttribute("type", pageRequestDto.getType());
         rttr.addAttribute("keyword", pageRequestDto.getKeyword());
         return "redirect:/movie/list";
+    }
+
+    @GetMapping("/create")
+    public void getCreate(@ModelAttribute("requestDto") PageRequestDto pageRequestDto) {
+        log.info("영화 작성 폼 요청");
+    }
+
+    @PostMapping("/create")
+    public String postCreate(MovieDto movieDto, @ModelAttribute("requestDto") PageRequestDto pageRequestDto,
+            RedirectAttributes rttr) {
+        log.info("영화등록 {}", movieDto);
+
+        // 서비스
+        Long mno = movieService.register(movieDto);
+
+        rttr.addAttribute("mno", mno);
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", pageRequestDto.getSize());
+        rttr.addAttribute("type", pageRequestDto.getType());
+        rttr.addAttribute("keyword", pageRequestDto.getKeyword());
+        return "redirect:/movie/read";
     }
 
 }

@@ -9,7 +9,7 @@ import com.example.movie.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    // movie_mno 를 이용해 review 제거 메소드 생성
+    // movie_mno 를 이용해 review 제거 메서드 생성
     @Modifying
     @Query("DELETE FROM Review r WHERE r.movie = :movie")
     void deleteByMovie(Movie movie);
