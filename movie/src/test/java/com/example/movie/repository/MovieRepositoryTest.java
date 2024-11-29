@@ -11,10 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.movie.entity.Movie;
 import com.example.movie.entity.MovieImage;
+
+import jakarta.transaction.Transactional;
 
 @SpringBootTest
 public class MovieRepositoryTest {
@@ -73,8 +74,8 @@ public class MovieRepositoryTest {
         movieRepository.delete(movie);
     }
 
-    @Commit
-    @Transactional
+    // @Commit
+    // @Transactional
     @Test
     public void testRemove2() {
 
@@ -82,4 +83,5 @@ public class MovieRepositoryTest {
 
         movieRepository.delete(movie);
     }
+
 }

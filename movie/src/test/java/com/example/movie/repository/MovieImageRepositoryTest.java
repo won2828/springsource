@@ -51,4 +51,5 @@ public class MovieImageRepositoryTest {
             System.out.println(Arrays.toString(objects));
         }
     }
+
 }
