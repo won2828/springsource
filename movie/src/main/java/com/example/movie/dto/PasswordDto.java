@@ -11,5 +11,4 @@ public class PasswordDto {
     private String email;
     private String currentPassword;
     private String newPassword;
-
 }

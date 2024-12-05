@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.movie.entity.Member;
+import com.example.movie.entity.Movie;
+import com.example.movie.entity.MovieImage;
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {

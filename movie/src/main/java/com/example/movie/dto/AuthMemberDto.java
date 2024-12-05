@@ -18,8 +18,8 @@ public class AuthMemberDto extends User {
 
     private MemberDto memberDto;
 
-    public AuthMemberDto(String username, String passwor, Collection<? extends GrantedAuthority> authorities) {
-        super(username, passwor, authorities);
+    public AuthMemberDto(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
     }
 
     public AuthMemberDto(MemberDto memberDto) {

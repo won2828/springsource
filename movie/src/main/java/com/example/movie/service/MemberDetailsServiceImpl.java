@@ -15,7 +15,6 @@ import com.example.movie.dto.PasswordDto;
 import com.example.movie.entity.Member;
 import com.example.movie.entity.constant.MemberRole;
 import com.example.movie.repository.MemberRepository;
-import com.example.movie.repository.MemberService;
 import com.example.movie.repository.ReviewRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -64,19 +63,17 @@ public class MemberDetailsServiceImpl implements UserDetailsService, MemberServi
 
     @Override
     public void passwordUpdate(PasswordDto passwordDto) throws Exception {
-
         // email 을 이용해 사용자 찾기
         // Optional<Member> result =
         // memberRepository.findByEmail(passwordDto.getEmail());
-        // if (!result.isPresent())
-        // throw new UsernameNotFoundException("이메일 확인");
+        // if (!result.isPresent()) throw new UsernameNotFoundException("이메일 확인");
 
         Member member = memberRepository.findByEmail(passwordDto.getEmail()).get();
 
-        // 현재 비밀번호(db에 저장된 값)가 입력 비밀번호(입력된 값)와 일치하는지 검증
+        // 현재 비밀번호(db에 저장된 값)가 입력 비밀번호(입력값)와 일치하는지 검증
         if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), member.getPassword())) {
             // false : 되돌려 보내기
-            throw new Exception("현재 비밀번호를 확인");
+            throw new Exception("현재 비밀번호를 확인해 주세요");
         } else {
             // true : 새 비밀번호로 수정
             member.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
@@ -91,12 +88,12 @@ public class MemberDetailsServiceImpl implements UserDetailsService, MemberServi
         Member member = memberRepository.findByEmail(passwordDto.getEmail()).get();
 
         if (!passwordEncoder.matches(passwordDto.getCurrentPassword(), member.getPassword())) {
-            throw new Exception("현재 비밀번호를 확인해주세요.");
+            throw new Exception("현재 비밀번호를 확인해 주세요");
         }
 
-        // 리뷰 삭제(리뷰를 작성한 멤버를 이용해서 삭제)
-        reviewRepository.deldeleteByMember(member);
-        // 회원 삭제
+        // 리뷰삭제(리뷰를 작성한 멤버를 이용해서 삭제)
+        reviewRepository.deleteByMember(member);
+        // 회원삭제
         memberRepository.deleteById(member.getMid());
     }
 

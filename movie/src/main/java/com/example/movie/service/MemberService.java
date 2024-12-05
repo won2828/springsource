@@ -1,4 +1,4 @@
-package com.example.movie.repository;
+package com.example.movie.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -9,19 +9,17 @@ import com.example.movie.entity.constant.MemberRole;
 
 public interface MemberService {
 
-    // private PasswordEncoder passwordEncoder;
-
     // 닉네임 수정
     void nickNickUpdate(MemberDto memberDto);
 
     // 비밀번호 수정
     void passwordUpdate(PasswordDto passwordDto) throws Exception;
 
-    // 회원 가입
-    String register(MemberDto memberDto);
-
-    // 회원 탈퇴
+    // 회원탈퇴
     void leave(PasswordDto passwordDto) throws Exception;
+
+    // 회원가입
+    String register(MemberDto memberDto);
 
     default Member dtoToEntity(MemberDto memberDto) {
         Member member = Member.builder()
@@ -34,14 +32,13 @@ public interface MemberService {
     }
 
     // default MemberDto entityToDto(Member member) {
-    // MemberDto memberdDto = MemberDto.builder()
+    // MemberDto memberDto = MemberDto.builder()
     // .mid(member.getMid())
     // .email(member.getEmail())
     // .password(member.getPassword())
     // .nickname(member.getNickname())
     // .role(MemberRole.MEMBER)
     // .build();
-    // return memberdDto;
+    // return memberDto;
     // }
-
 }
